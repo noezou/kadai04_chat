@@ -7,23 +7,147 @@
     <title>Kadai04 Chat(Firebase使用)</title>
     <link rel="stylesheet" href="./css/reset.css" />
     <link rel="stylesheet" href="./css/style.css" />
+
+    <!-- Material Design Lite -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+      rel="stylesheet"
+      href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css"
+    />
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+    <!-- App Styling -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"
+    />
   </head>
 
   <body>
-    <main>
-      <h1>チャットアプリ</h1>
-      <!-- コンテンツ表示画面 -->
-      <div>
-        <div>
-          <input type="text" id="uname" placeholder="名前を入力してください" />
+    <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <!-- Header section containing logo -->
+      <header
+        class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700"
+      >
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
+          <div
+            class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop"
+          >
+            <h3>
+              <i class="material-icons">chat_bubble_outline</i> チャットアプリ
+            </h3>
+          </div>
+          <div id="user-container">
+            <div hidden id="user-pic"></div>
+            <div hidden id="user-name"></div>
+            <!-- 
+            <button
+              hidden
+              id="sign-out"
+              class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+            >
+              Sign-out
+            </button>
+            <button
+              hidden
+              id="sign-in"
+              class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+            >
+              <i class="material-icons">account_circle</i>Sign-in with Google
+            </button>
+             -->
+          </div>
         </div>
-        <div>
-          <textarea id="text" placeholder="文章を入力してください"></textarea>
+      </header>
+
+      <main class="mdl-layout__content mdl-color--grey-100">
+        <div
+          id="messages-card-container"
+          class="mdl-cell mdl-cell--12-col mdl-grid"
+        >
+          <!-- <h1>チャットアプリ</h1> -->
+          <!-- コンテンツ表示画面 -->
+          <div class="balloonA">
+            <div id="output" style="overflow: auto; height: 300px"></div>
+          </div>
+
+          <div>
+            <div>
+              <input
+                type="text"
+                id="uname"
+                placeholder="名前を入力してください"
+              />
+            </div>
+            <div>
+              <textarea
+                id="text"
+                placeholder="文章を入力してください"
+              ></textarea>
+            </div>
+            <div id="time"></div>
+            <button id="send">送信</button>
+            <!-- 
+        <input type="hidden" id="timestamp" name="timestamp" value="1286705410" />
+         -->
+          </div>
+
+          <!-- Messages container -->
+          <div
+            id="messages-card"
+            class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop"
+          >
+            <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+              <div id="messages"></div>
+              <form id="message-form" action="#">
+                <div
+                  class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                >
+                  <input
+                    class="mdl-textfield__input"
+                    type="text"
+                    id="message"
+                    autocomplete="off"
+                  />
+                  <label class="mdl-textfield__label" for="message"
+                    >メッセージを入力...</label
+                  >
+                </div>
+                <button
+                  id="submit"
+                  disabled
+                  type="submit"
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                >
+                  Send
+                </button>
+              </form>
+
+              <!-- 画像データを取り込むためのフォーム
+              <form id="image-form" action="#">
+                <input
+                  id="mediaCapture"
+                  type="file"
+                  accept="image/*"
+                  capture="camera"
+                />
+                <button
+                  id="submitImage"
+                  title="Add an image"
+                  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--amber-400 mdl-color-text--white"
+                >
+                  <i class="material-icons">image</i>
+                </button>
+              </form>
+              -->
+            </div>
+          </div>
         </div>
-        <button id="send">送信</button>
-        <div id="output"></div>
-      </div>
-    </main>
+      </main>
+    </div>
     <footer></footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- 必ず自分で作成した script.jsよりも上に貼り付ける -->
@@ -35,12 +159,16 @@
         ref,
         push,
         set,
-        onChildAdded,
+        update,
         remove,
+        onChildAdded,
+        onChildChanged,
         onChildRemoved,
+        onDisconnect,
+        serverTimestamp,
       } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
 
-      // Your web app's Firebase configuration Firebaseからコピーして貼り付ける
+      // FirebaseのRealtime Database管理画面に表示された値をコピーして貼り付ける
       const firebaseConfig = {
         apiKey: "AIzaSyAK_59gTcgHB0jqS9YvMeHmbGuj56oD0YQ",
         authDomain: "dev28-34b97.firebaseapp.com",
@@ -52,41 +180,71 @@
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app); //RealtimeDBに接続
       const dbRef = ref(db, "chat"); //RealtimeDB内の"chat"に格納する
+
       //データ登録(Click)
       $("#send").on("click", function () {
+        let date = new Date();
+        console.log(date);
+        const jsonDate = date.toJSON();
+        console.log(jsonDate);
+
         const msg = {
           uname: $("#uname").val(),
           text: $("#text").val(),
+          jsonDate: $("#time").val(),
         };
         const newPostRef = push(dbRef); //ユニークKEY（ここではnewPostRef)を生成
         set(newPostRef, msg); //"chat"にユニークKEYをつけてオブジェクトデータを登録
       });
 
-      //データ登録(Enter)
-      $("#text").on("keydown", function (e) {
-        console.log(e); //e変数の中身を確認！！
-        if (e.keyCode == 13) {
-          //EnterKey=13
-          const msg = {
-            uname: $("#uname").val(),
-            text: $("#text").val(),
-          };
-          const newPostRef = push(dbRef); //ユニークKEYを生成
-          set(newPostRef, msg); //"chat"にユニークKEYをつけてオブジェクトデータを登録
-        }
-      });
-
       //最初にデータ取得 ＆onSnapshotでリアルタイムにデータを取得
       onChildAdded(dbRef, function (data) {
         const msg = data.val(); //オブジェクトデータを取得し、変数msgに代入
-        const key = data.key; //データのユニークキー（削除や更新に使用可能）
+        const key = data.key; //データのユニークキー（削除や更新に必須）
         //表示用テキスト・HTMLを作成
-        let h = "<p>";
+        let h = '<p id="' + key + '">';
         h += msg.uname;
         h += "<br>";
-        h += msg.text;
+        // h += msg.text;
+        h +=
+          '<span contentEditable "true" id="' +
+          key +
+          '_update">' +
+          msg.text +
+          "</span>";
+        h += '<span class="remove" data-key= "' + key + '">【削除】</span>';
+        h += '<span class="update" data-key= "' + key + '">【更新】</span>';
+        h += "<br>";
+        h += msg.jsonDate;
         h += "</p>";
-        $("#output").append(h); //#outputの最後に追加
+        $("#output").prepend(h); //#outputの最後に追加
+      });
+      // 削除イベント
+      $("#output").on("click", ".remove", function () {
+        const key = $(this).attr("data-key");
+        const remove_item = ref(db, "chat/" + key);
+        remove(remove_item); //Firebaseデータ削除関数
+      });
+
+      // 更新イベント
+      $("#output").on("click", ".update", function () {
+        const key = $(this).attr("data-key");
+        update(ref(db, "chat/" + key), {
+          text: $("#" + key + "_update").html(), // テキスト文字を書き換えられるようにする
+        });
+      });
+
+      // 削除処理がFirebase側で実行されたらイベント発生！
+      onChildRemoved(dbRef, (data) => {
+        $("#" + data.key).remove(); // DOM操作関数（対象を削除）
+      });
+
+      // 更新処理がFirebase側で実行されたらイベント発生！
+      onChildChanged(dbRef, (data) => {
+        $("#" + data.key + "_update").html(data.val().text);
+        $("#" + data.key + "_update")
+          .fadeOut(800)
+          .fadeIn(800);
       });
     </script>
     <script src="./js/script.js"></script>
