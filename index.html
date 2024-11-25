@@ -39,34 +39,33 @@
       <main>
         <!-- コンテンツ表示画面 -->
         <div class="balloonA">
-          <div id="output" style="overflow: auto; height: 300px"></div>
+          <p id="output" style="overflow: auto; height: 300px"><br /></p>
         </div>
 
-<!-- 左と右に表示させるバージョン LINE的-->
-<div class="line-bc"><!--①LINE会話全体を囲う-->
+        <!-- 左と右に表示させるバージョン LINE風チャット-->
 
-  <!--②左コメント始-->
-  <div class="balloon6">
-    <div class="faceicon">
-      ★ここにアイコン画像 <img~>★
-    </div>
-    <div class="chatting">
-      <div class="says">
-        <p>左ふきだし文</p>
-      </div>
-    </div>
-  </div>
-  <!--②/左コメント終-->
+        <!--会話全体を囲う-->
+        <div class="line-bc">
+          <!--左ふきだし始-->
+          <div class="balloonLeft">
+            <div class="faceicon">
+              <img src="./images/profile_placeholder.png" />
+            </div>
+            <div class="chatting">
+              <div class="tweet">
+                <p>左ふきだし文</p>
+              </div>
+            </div>
+          </div>
+          <!--/左ふきだし終-->
 
-  <!--③右コメント始-->
-  <div class="mycomment">
-    <p>
-    右ふきだし文
-    </p>
-  </div>
-  <!--/③右コメント終-->
-  
-</div><!--/①LINE会話終了-->
+          <!--右ふきだし始-->
+          <div class="baloonRight">
+            <p>右ふきだし文</p>
+          </div>
+          <!--右ふきだし終-->
+        </div>
+        <!--LINE風チャット終了-->
 
         <div>
           <div>
@@ -145,6 +144,12 @@
       onChildAdded(dbRef, function (data) {
         const msg = data.val(); //オブジェクトデータを取得し、変数msgに代入
         const key = data.key; //データのユニークキー（削除や更新に必須）
+
+        const dataTime = msg.time; // 時刻はUTC表記になっている
+        const dt = new Date(dataTime); // 時刻をJST表記に変更するために、9時間足す
+        console.log(dt.toLocaleString());
+        const JSTtime = dt.toLocaleString("ja-JP").slice(0, -3); // ミリ秒をカット
+
         //表示用テキスト・HTMLを作成
         let h = '<p id="' + key + '">';
         h += msg.uname;
@@ -159,7 +164,8 @@
         h += '<span class="remove" data-key= "' + key + '">【削除】</span>';
         h += '<span class="update" data-key= "' + key + '">【更新】</span>';
         h += "<br>";
-        h += msg.time;
+        h += JSTtime;
+        h += "<br>";
         h += "</p>";
         $("#output").prepend(h); //#outputに追加
       });

@@ -33,16 +33,22 @@ button {
 }
 
 #output {
-  width: 500px;
+  /* width: 500px; */
   display: block;
-  height: 500px;
+  /* height: 500px; */
   border: 1px solid #ccc;
   margin: 0 auto;
   border-radius: 8px;
   padding: 10px;
   overflow: auto;
 }
+.remove {
+  cursor: pointer;
+}
 
+.update {
+  cursor: pointer;
+}
 /* .layout {
 } */
 .layout_header-row span {
@@ -69,6 +75,7 @@ button {
   margin-right: 5px;
 }
 
+/* チャットを全て表示させるふきだし */
 .balloonA {
   position: relative;
   margin: 2em 0 2em 40px;
@@ -103,7 +110,7 @@ button {
   padding: 0;
 }
 
-/*以下、①背景色など*/
+/*以下、LINE風チャット背景色など*/
 .line-bc {
   padding: 20px 10px;
   max-width: 450px;
@@ -113,29 +120,29 @@ button {
   background: #7da4cd;
 }
 
-/*以下、②左側のコメント*/
-.balloon6 {
+/*以下、左側のふきだし*/
+.balloonLeft {
   width: 100%;
   margin: 10px 0;
   overflow: hidden;
 }
 
-.balloon6 .faceicon {
+.balloonLeft .faceicon {
   float: left;
   margin-right: -50px;
   width: 40px;
 }
 
-.balloon6 .faceicon img {
+.balloonLeft .faceicon img {
   width: 100%;
   height: auto;
   border-radius: 50%;
 }
-.balloon6 .chatting {
+.balloonLeft .chatting {
   width: 100%;
   text-align: left;
 }
-.says {
+.tweet {
   display: inline-block;
   position: relative;
   margin: 0 0 0 50px;
@@ -145,7 +152,7 @@ button {
   background: #edf1ee;
 }
 
-.says:after {
+.tweet:after {
   content: "";
   display: inline-block;
   position: absolute;
@@ -156,16 +163,16 @@ button {
   -webkit-transform: rotate(35deg);
   transform: rotate(35deg);
 }
-.says p {
+.tweet p {
   margin: 0;
   padding: 0;
 }
 
-/*以下、③右側の緑コメント*/
-.mycomment {
+/*以下、右側の緑色ふきだし*/
+.baloonRight {
   margin: 10px 0;
 }
-.mycomment p {
+.baloonRight p {
   display: inline-block;
   position: relative;
   margin: 0 10px 0 0;
@@ -176,7 +183,7 @@ button {
   font-size: 15px;
 }
 
-.mycomment p:after {
+.baloonRight p:after {
   content: "";
   position: absolute;
   top: 3px;
