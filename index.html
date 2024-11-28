@@ -4,69 +4,79 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kadai04 Chat(Firebase使用)</title>
-    <link rel="stylesheet" href="./css/reset.css" />
+    <title>課題04 チャットアプリ(Firebase使用)</title>
+    <!-- <link rel="stylesheet" href="./css/reset.css" /> -->
     <link rel="stylesheet" href="./css/style.css" />
-
     <!-- Material Design Lite -->
-    <link
+    <!-- <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
+    /> -->
 
     <!-- Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700&amp;display=swap"
       rel="stylesheet"
-    />
+      href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700&amp;display=swap"
+    /> -->
   </head>
 
   <body>
-    <div class="layout">
-      <!-- Header section containing logo -->
+    <div id="layout">
       <header class="layout_header">
-        <div class="grid">
-          <div class="layout_header-row">
-            <h1>
-              <i class="material-icons">chat_bubble_outline</i> チャットアプリ
-            </h1>
-          </div>
-        </div>
+        <h1>チャットアプリ</h1>
       </header>
 
       <main>
-        <!-- コンテンツ表示画面 -->
+        <!-- LINE風チャット -->
+        <div class="chat-container">
+          <div id="chat-area" class="chat-area"></div>
+          <div class="input-area">
+            <div class="character-selector">
+              <label
+                ><input
+                  type="radio"
+                  name="character"
+                  value="A"
+                  checked
+                />A</label
+              >
+              <audio
+                id="click-A-sound"
+                src="./sound/button7.mp3"
+                type="audio/mp3"
+              ></audio>
+              <label><input type="radio" name="character" value="B" />B</label>
+              <audio
+                id="click-B-sound"
+                src="./sound/button31.mp3"
+                type="audio/mp3"
+              ></audio>
+            </div>
+            <input
+              type="text"
+              id="message-input"
+              placeholder="メッセージを入力..."
+            />
+            <button id="send-button">送信</button>
+            <audio
+              id="send-sound"
+              src="./sound/button44.mp3"
+              type="audio/mp3"
+            ></audio>
+          </div>
+          <!-- end of chat-area -->
+        </div>
+        <!-- end of chat-container -->
+        <!-- End of LINE風チャット -->
+
+        <!-- コンテンツを一覧表示する -->
         <div class="balloonA">
           <p id="output" style="overflow: auto; height: 300px"><br /></p>
         </div>
 
-        <!-- 左と右に表示させるバージョン LINE風チャット-->
-
-        <!--会話全体を囲う-->
-        <div class="line-bc">
-          <!--左ふきだし始-->
-          <div class="balloonLeft">
-            <div class="faceicon">
-              <img src="./images/profile_placeholder.png" />
-            </div>
-            <div class="chatting">
-              <div class="tweet">
-                <p>左ふきだし文</p>
-              </div>
-            </div>
-          </div>
-          <!--/左ふきだし終-->
-
-          <!--右ふきだし始-->
-          <div class="baloonRight">
-            <p>右ふきだし文</p>
-          </div>
-          <!--右ふきだし終-->
-        </div>
-        <!--LINE風チャット終了-->
-
+        <!-- 入力用エリア -->
         <div>
           <div>
             <input
@@ -82,7 +92,9 @@
             <input type="hidden" id="time" />
           </div>
           <button id="send">送信</button>
+          <audio id="pop-sound" src="./sound/button44.mp3"></audio>
         </div>
+        <!-- END of 入力用エリア -->
       </main>
     </div>
     <footer></footer>
@@ -107,13 +119,14 @@
 
       // FirebaseのRealtime Database管理画面に表示された値をコピーして貼り付ける
       const firebaseConfig = {
-        apiKey: "AIzaSyAK_59gTcgHB0jqS9YvMeHmbGuj56oD0YQ",
-        authDomain: "dev28-34b97.firebaseapp.com",
-        projectId: "dev28-34b97",
-        storageBucket: "dev28-34b97.firebasestorage.app",
-        messagingSenderId: "941478211478",
-        appId: "1:941478211478:web:ebcace4368cfe6fc24f7b7",
+        apiKey: "",
+        authDomain: "",
+        projectId: "",
+        storageBucket: "",
+        messagingSenderId: "",
+        appId: "",
       };
+
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app); //RealtimeDBに接続
       const dbRef = ref(db, "chat"); //RealtimeDB内の"chat"に格納する
@@ -161,11 +174,10 @@
           '_update">' +
           msg.text +
           "</span>";
-        h += '<span class="remove" data-key= "' + key + '">【削除】</span>';
-        h += '<span class="update" data-key= "' + key + '">【更新】</span>';
+        h += '<span class="remove" data-key= "' + key + '">【 削除 】</span>';
+        h += '<span class="update" data-key= "' + key + '">【 更新 】</span>';
         h += "<br>";
         h += JSTtime;
-        h += "<br>";
         h += "</p>";
         $("#output").prepend(h); //#outputに追加
       });
@@ -197,6 +209,23 @@
           .fadeIn(800);
       });
     </script>
-    <script src="./js/script.js"></script>
+    <script src="./js/script.js" type="module"></script>
+
+    <script src="./js/three.r134.min.js"></script>
+    <script src="./js/vanta.birds.min.js"></script>
+    <script>
+      VANTA.BIRDS({
+        el: "#layout",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        speedLimit: 3.0,
+        alignment: 40.0,
+      });
+    </script>
   </body>
 </html>

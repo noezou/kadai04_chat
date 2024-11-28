@@ -1,35 +1,197 @@
-* {
+/* * {
   box-sizing: border-box;
+} */
+body {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  height: 100vh;
+  background-color: #f7f7f7;
+}
+
+.layout_header {
+  max-width: 1024px;
+  height: 50px;
+  margin: auto;
+  /* align-items: center; */
 }
 
 h1 {
   text-align: center;
   margin: 50px 0;
   font-size: 20px;
+  color: white;
 }
 
-input {
-  width: 500px;
+.chat-container {
+  width: 100%;
+  max-width: 1024px;
+  /* background-color: #fff; */
+  background-color: hsla(0, 0%, 100%, 0.3);
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chat-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  /* background-color: #eef1f5; */
+  background-color: hsla(0, 0%, 100%, 0.3);
+}
+
+.message {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.message-left {
+  justify-content: flex-start;
+}
+
+.message-right {
+  justify-content: flex-end;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  background-color: #d1e7ff;
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.message-right .message-bubble {
+  background-color: #c7ffc4;
+}
+
+.input-area {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.character-selector {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.character-selector label {
+  margin-right: 10px;
+  font-size: 14px;
+  background-color: #eef1f5;
+}
+
+#message-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+#send-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 20px;
+  background-color: #4caf50;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#send-button:hover {
+  cursor: pointer;
+  background-color: #4436a0;
+}
+
+/* チャットを全て表示させるふきだし */
+.balloonA {
+  position: relative;
+  margin: 2em 0 2em 40px;
+  padding: 15px;
+  /* background: #d5fede; */
+  background-color: hsla(120, 76%, 88%, 0.288);
+  border-radius: 30px;
+}
+
+.balloonA:before {
+  content: "";
+  position: absolute;
+  left: -38px;
+  width: 13px;
+  height: 12px;
+  bottom: 0;
+  background: #d5fede;
+  border-radius: 50%;
+}
+
+.balloonA:after {
+  content: "";
+  position: absolute;
+  left: -24px;
+  width: 20px;
+  height: 18px;
+  bottom: 3px;
+  background: #d5fede;
+  border-radius: 50%;
+}
+.balloonA p {
+  margin: 0;
+  padding: 0;
+}
+
+input uname {
+  max-width: 800px;
   padding: 10px;
   display: block;
   margin: 0 auto 50px;
 }
 
 textarea {
-  width: 500px;
-  height: 200px;
+  width: 100%;
+  height: 100px;
   padding: 10px;
   margin: 0 auto 50px;
   display: block;
   resize: none;
+  border-radius: 10px;
 }
 
-button {
+#send {
   width: 200px;
   height: 50px;
   margin: 0 auto 50px;
   display: block;
   font-size: 16px;
+  border-radius: 10px;
+}
+
+#send:hover {
+  width: 200px;
+  height: 50px;
+  margin: 0 auto 50px;
+  display: block;
+  background-color: gold;
+  font-size: 18px;
+  border-radius: 15px;
 }
 
 #output {
@@ -42,154 +204,14 @@ button {
   padding: 10px;
   overflow: auto;
 }
+
 .remove {
   cursor: pointer;
+  color: red;
+  background: white;
 }
 
 .update {
   cursor: pointer;
-}
-/* .layout {
-} */
-.layout_header-row span {
-  margin-left: 15px;
-  margin-top: 17px;
-}
-.layout_header-row {
-  padding: 0;
-  margin: 0 auto;
-}
-
-.grid {
-  max-width: 1024px;
-  margin: auto;
-}
-.material-icons {
-  font-size: 36px;
-  top: 8px;
-  position: relative;
-}
-
-.material-icons {
-  top: -1px;
-  margin-right: 5px;
-}
-
-/* チャットを全て表示させるふきだし */
-.balloonA {
-  position: relative;
-  margin: 2em 0 2em 40px;
-  padding: 15px;
-  background: #fff0c6;
-  border-radius: 30px;
-}
-
-.balloonA:before {
-  content: "";
-  position: absolute;
-  left: -38px;
-  width: 13px;
-  height: 12px;
-  bottom: 0;
-  background: #fff0c6;
-  border-radius: 50%;
-}
-
-.balloonA:after {
-  content: "";
-  position: absolute;
-  left: -24px;
-  width: 20px;
-  height: 18px;
-  bottom: 3px;
-  background: #fff0c6;
-  border-radius: 50%;
-}
-.balloonA p {
-  margin: 0;
-  padding: 0;
-}
-
-/*以下、LINE風チャット背景色など*/
-.line-bc {
-  padding: 20px 10px;
-  max-width: 450px;
-  margin: 15px auto;
-  text-align: right;
-  font-size: 14px;
-  background: #7da4cd;
-}
-
-/*以下、左側のふきだし*/
-.balloonLeft {
-  width: 100%;
-  margin: 10px 0;
-  overflow: hidden;
-}
-
-.balloonLeft .faceicon {
-  float: left;
-  margin-right: -50px;
-  width: 40px;
-}
-
-.balloonLeft .faceicon img {
-  width: 100%;
-  height: auto;
-  border-radius: 50%;
-}
-.balloonLeft .chatting {
-  width: 100%;
-  text-align: left;
-}
-.tweet {
-  display: inline-block;
-  position: relative;
-  margin: 0 0 0 50px;
-  padding: 10px;
-  max-width: 250px;
-  border-radius: 12px;
-  background: #edf1ee;
-}
-
-.tweet:after {
-  content: "";
-  display: inline-block;
-  position: absolute;
-  top: 3px;
-  left: -19px;
-  border: 8px solid transparent;
-  border-right: 18px solid #edf1ee;
-  -webkit-transform: rotate(35deg);
-  transform: rotate(35deg);
-}
-.tweet p {
-  margin: 0;
-  padding: 0;
-}
-
-/*以下、右側の緑色ふきだし*/
-.baloonRight {
-  margin: 10px 0;
-}
-.baloonRight p {
-  display: inline-block;
-  position: relative;
-  margin: 0 10px 0 0;
-  padding: 8px;
-  max-width: 250px;
-  border-radius: 12px;
-  background: #30e852;
-  font-size: 15px;
-}
-
-.baloonRight p:after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  right: -19px;
-  border: 8px solid transparent;
-  border-left: 18px solid #30e852;
-  -webkit-transform: rotate(-35deg);
-  transform: rotate(-35deg);
+  color: blue;
 }
